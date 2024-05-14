@@ -12,8 +12,8 @@ import java.util.HashMap;
  */
 public class GraphOperations {
     // 两个哈希表，对在建图时需要
-    private static HashMap<String , Node> nodeHashMap = new HashMap<>();
-    private static HashMap<String, Edge> edgeHashMap = new HashMap<>();
+    public static HashMap<String , Node> nodeHashMap = new HashMap<>();
+    public static HashMap<String, Edge> edgeHashMap = new HashMap<>();
 
     /**
      *  根据单词数组，生成有向图
@@ -60,5 +60,6 @@ public class GraphOperations {
         return graph;
 
     }
+
 
 }
