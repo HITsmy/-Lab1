@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.Tool.edge;
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.ui.swingViewer.View;
 import org.graphstream.ui.swingViewer.Viewer;
@@ -11,8 +13,22 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.*;
+import java.util.List;
 
 public class Util {
+    // 节点列表
+    public static List<String> nodes = new ArrayList<>();
+
+    // 表示节点对应的所有出边
+    public static HashMap<String, List<edge>> links = new HashMap<>();
+    // 图的边和权重的映射
+    public static HashMap<edge, Integer> weights = new HashMap<>();
+
+    // 表示图的大小
+    public static int size;
+
+
     /**
      *
      * @param filename 文件名路径
@@ -59,6 +75,35 @@ public class Util {
         ImageIO.write(image, "png", new File(filename));
 
         System.out.println("Graph saved as image.");
+    }
+
+
+    /**
+     *  初始化上面所提工具的函数
+     * @param nodes 节点集合
+     * @param edges 边集合
+     * @param graph 图
+     */
+    public static void InitTools(Set<String> nodes, Set<String> edges, Graph graph) {
+        for (String node : nodes)
+            Util.nodes.add(node);
+        for (String edgeStr : edges) {
+            String[] srcAndDst = edgeStr.split("->");
+            String src = srcAndDst[0], dst = srcAndDst[1];
+            edge e = new edge(src, dst);
+            if (!links.containsKey(src)) {
+                List<edge> edgesForSrc = new LinkedList<>();
+                edgesForSrc.add(e);
+                links.put(src, edgesForSrc);
+            } else {
+                List<edge> edgeForSrc = links.get(src);
+                edgeForSrc.add(e);
+            }
+            int weight = (int)graph.getEdge(edgeStr).getAttribute("weight");
+            weights.put(e, weight);
+        }
+
+        System.out.println("初始化完成");
     }
 
 }

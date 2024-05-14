@@ -1,11 +1,13 @@
 
 import org.example.GraphOperations;
+import org.example.Tool.edge;
 import org.example.Util;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.layout.Layouts;
 import org.graphstream.ui.swingViewer.View;
 import org.graphstream.ui.swingViewer.Viewer;
 
@@ -15,39 +17,37 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+
 
 public class test {
     public static void main(String[] args) throws IOException, InterruptedException, AWTException {
-        // 创建一个图
-        Graph graph = new MultiGraph("My Graph");
-        graph.addNode("A");
-        graph.addNode("B");
-        graph.addEdge("AB", "A", "B");
+        // 初始化空的有向图
+        Graph graph = new MultiGraph("DirectedGraph");
+        graph.setStrict(false);
 
-        // 显示图
-        Viewer viewer = graph.display();
-        View view =  viewer.getDefaultView();
+        // 读取文件并切分字符串得到单词数组
+        StringBuilder textContent = Util.read("src/main/java/org/example/text/text.txt");
+        String[] words = textContent.toString().split( "\\s+");
+        for (String word : words) {
+            System.out.println(word);
+        }
 
-        // 等待视图渲染完成（这里只是一个简单的等待，实际中可能需要更复杂的逻辑）
-        Thread.sleep(1000);
+        // 根据单词数组生成有向图
+        graph = GraphOperations.generateGraph(words);
+        System.out.println();
 
-        // 计算Viewer组件的大小和屏幕位置
-        Rectangle bounds = view.getBounds();
-        Point locationOnScreen = view.getLocationOnScreen();
 
-        // 创建一个Robot对象
-        Robot robot = new Robot();
+        Util.InitTools(GraphOperations.nodeHashMap.keySet(), GraphOperations.edgeHashMap.keySet(), graph);
+        System.out.println(Util.nodes);
+        for (Map.Entry<edge, Integer> entry : Util.weights.entrySet())
+            System.out.println(entry.getKey().src+"->"+entry.getKey().dst+"       :"+entry.getValue());
 
-        // 创建一个BufferedImage来保存截图
-        BufferedImage image = robot.createScreenCapture(new Rectangle(locationOnScreen.x, locationOnScreen.y, bounds.width, bounds.height));
+        for (Map.Entry<String, List<edge> > entry : Util.links.entrySet())
+            System.out.println(entry.getKey()+"      :" +entry.getValue().size());
 
-        // 保存图像到文件
-        ImageIO.write(image, "png", new File("graph.png"));
-
-        // 关闭Viewer（如果需要）
-        viewer.close();
-
-        System.out.println("Graph saved as image.");
 
 
     }

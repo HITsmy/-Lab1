@@ -13,8 +13,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class Main {
-    private static HashMap<String ,Node> nodeHashMap = new HashMap<>();
-    private static HashMap<String, Edge> edgeHashMap = new HashMap<>();
     public static void main(String[] args) throws IOException, InterruptedException, AWTException {
 
         // 初始化空的有向图
@@ -31,6 +29,9 @@ public class Main {
         // 根据单词数组生成有向图
         graph = GraphOperations.generateGraph(words);
         System.out.println();
+
+        // 初始化工具
+        Util.InitTools(GraphOperations.nodeHashMap.keySet(), GraphOperations.edgeHashMap.keySet(), graph);
 
         // 展示有向图
         Viewer viewer = graph.display();
