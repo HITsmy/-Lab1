@@ -152,11 +152,15 @@ public class GraphOperations {
      * @return String
      */
     public static String calcShortestPath(Util util, String word1, String word2){
-        //初始化S,U
+        //初始化S,U,R
         HashMap<String, Integer> S = new HashMap();
         HashMap<String, Integer> U = new HashMap();
+        HashMap<String,List<String>> R = new HashMap<>();
         S.put(word1,0);
         for(String i : util.nodes){
+            List<String> a = new ArrayList<>();
+            a.add(word1);
+            R.put(i, a);
             if(!i.equals(word1)){
                 U.put(i, 10000);
             }
@@ -184,15 +188,21 @@ public class GraphOperations {
                 }
             }
             S.put(chosenNode,U.get(chosenNode));
+            R.get(chosenNode).add(chosenNode);
             U.remove(chosenNode);
             System.out.println(chosenNode+"-----------------------------------------------------------");
-
+            //System.out.println(R.get(chosenNode));
+            System.out.println(R.get(chosenNode));
             //重新计算期望距离
             if(util.links.get(chosenNode)!=null){
 
                 for(edge i : util.links.get(chosenNode)){
                     if(U.get(i.dst)!=null && U.get(i.dst)>util.weights.get(i)+S.get(chosenNode)){
+
                         U.put(i.dst,util.weights.get(i)+S.get(chosenNode));
+                        R.remove(i.dst);
+
+                        R.put(i.dst,new ArrayList<>(R.get(chosenNode)));
                     }
                 }
 
@@ -200,15 +210,20 @@ public class GraphOperations {
             }
             if(U.size()==1){
                 System.out.println(S +"   "+ U);
-                System.out.println(U.keySet().toArray()[0]+"-----------------------------------------------------------");
 
+                chosenNode = U.keySet().toArray()[0].toString();
+                S.put(chosenNode,U.get(chosenNode));
+                R.get(chosenNode).add(chosenNode);
+                U.remove(chosenNode);
+                System.out.println(chosenNode+"-----------------------------------------------------------");
+                //System.out.println(R.get(chosenNode));
+                System.out.println(R.get(chosenNode));
                 break;
             }
             System.out.println(S +"   "+ U);
 
         }
-
-        return "Undefined";
+        return R.toString();
 
 
     }
@@ -269,5 +284,3 @@ public class GraphOperations {
 
 }
 
-
-}
