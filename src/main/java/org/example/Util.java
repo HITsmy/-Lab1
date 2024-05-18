@@ -102,6 +102,13 @@ public class Util {
             int weight = (int)graph.getEdge(edgeStr).getAttribute("weight");
             weights.put(e, weight);
         }
+        for (String node: nodes) {
+            if (!links.containsKey(node)) {
+                List<edge> edgesForSrc = new LinkedList<>();
+                links.put(node, edgesForSrc);
+            }
+
+        }
 
         System.out.println("初始化完成");
     }

@@ -1,9 +1,10 @@
 package org.example.Tool;
+import org.example.Util;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.MultiGraph;
 import org.graphstream.ui.layout.Layouts;
 import org.graphstream.ui.swingViewer.Viewer;
-
+import org.example.GraphOperations;
 
 import java.awt.*;
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class Main {
         //GraphOperations.queryBridgeWords(util, "to","strange");
         //System.out.println(GraphOperations.generateNewText("TTo strange worlds to seek out life new",util));
         //System.out.println(GraphOperations.randomWalk(util,"test1.txt"));
-        GraphOperations.calcShortestPath(util,"explore","new");
+        GraphOperations.calcShortestPath("explore","new");
 
         // 展示有向图
         Viewer viewer = graph.display();

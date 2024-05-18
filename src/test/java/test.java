@@ -1,21 +1,12 @@
-
 import org.example.GraphOperations;
 import org.example.Tool.edge;
 import org.example.Util;
-import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
-import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.ui.layout.Layouts;
-import org.graphstream.ui.swingViewer.View;
 import org.graphstream.ui.swingViewer.Viewer;
 
-
-import javax.imageio.ImageIO;
+import javax.swing.text.View;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -37,17 +28,24 @@ public class test {
 
         // 根据单词数组生成有向图
         graph = GraphOperations.generateGraph(words);
-        System.out.println();
 
 
+        // 初始化工具
         Util.InitTools(GraphOperations.nodeHashMap.keySet(), GraphOperations.edgeHashMap.keySet(), graph);
-        System.out.println(Util.nodes);
-        for (Map.Entry<edge, Integer> entry : Util.weights.entrySet())
-            System.out.println(entry.getKey().src+"->"+entry.getKey().dst+"       :"+entry.getValue());
 
-        for (Map.Entry<String, List<edge> > entry : Util.links.entrySet())
-            System.out.println(entry.getKey()+"      :" +entry.getValue().size());
+        // 计算最短路径
+        System.out.println("Shortest Path");
+        GraphOperations.calcShortestPath("strange", "new");
+        Viewer viewer = graph.display();
+        Util.draw(viewer, "src/main/java/org/example/png/shortest_distance.png");
 
+        // 生成文本
+        System.out.println("Generate Text:");
+        GraphOperations.generateNewText("seek to explore new and exciting synergies");
+
+        // 随机游走
+        System.out.println("Random Walk:");
+        GraphOperations.randomWalk("randomWalk");
 
 
     }
