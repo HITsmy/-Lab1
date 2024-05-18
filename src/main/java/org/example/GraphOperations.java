@@ -88,7 +88,7 @@ public class GraphOperations {
     }
     /**
      *  查询桥接词
-     * @param util, word1, word2
+     * @param  word1, word2
      * @return String
      */
     public static String queryBridgeWords(String word1, String word2){
@@ -153,6 +153,11 @@ public class GraphOperations {
      * @return String
      */
     public static void calcShortestPath(String word1, String word2){
+
+        if(!Util.nodes.contains(word1)||!Util.nodes.contains(word2)){
+            System.out.println(word1+"   "+word2+":不可达！！！！");
+            return ;
+        }
         //初始化S,U,R
         HashMap<String, Integer> S = new HashMap();
         HashMap<String, Integer> U = new HashMap();
@@ -249,6 +254,11 @@ public class GraphOperations {
 
         // 获取到word1到word2的节点路径
         List<String> path = R.get(word2);
+        Integer weight = S.get(word2);
+        if(weight>=100000){
+            System.out.println(word1+"   "+word2+":不可达！！！！");
+            return ;
+        }
         int front = -1, rear = 0;
         while (rear < path.size()) {
             Node node = nodeHashMap.get(path.get(rear));
@@ -266,10 +276,11 @@ public class GraphOperations {
     }
     /**
      * 随机漫步
-     * @param util
+     * @param filename
      * @return String
      */
     public static String randomWalk(String filename){
+
         //随机选取起始点
         Random rand = new Random();
         String chosenNode = Util.nodes.get(rand.nextInt(Util.nodes.size()));
@@ -280,6 +291,29 @@ public class GraphOperations {
         nodePath.add(chosenNode);
         //初始化路径记录
         List<edge> edgePath = new ArrayList<>();
+
+
+        //主线程处理漫游，子线程监听用户指令
+        Thread t = new Thread(new Runnable(){
+            @Override
+            public void run() {
+                while(true){
+                    Scanner scanner = new Scanner(System.in);
+                    String b =scanner.nextLine();
+                    System.out.println(b);
+                    if(b.equals("exit")){
+                        System.out.println("子线程：用户手动结束函数！！");
+                        return;
+                    }
+
+                }
+
+            }
+        });
+
+        // 启动线程
+        t.start();
+
         try {
             File file=new File("src/main/java/org/example/routine/"+filename);
             file.createNewFile();
@@ -290,13 +324,14 @@ public class GraphOperations {
 
                 //寻找出边
                 List<edge> optionalEdge = Util.links.get(tempNode);
-                if(optionalEdge==null){
+                if(optionalEdge.size()==0){
                     System.out.println("因该节点"+tempNode+" 无出边结束遍历");
                     break;
 
                 }
                 Random rand2 = new Random();
-                tempEdge = optionalEdge.get(rand2.nextInt(optionalEdge.size()));
+                Integer testnum= rand2.nextInt(optionalEdge.size());
+                tempEdge = optionalEdge.get(testnum);
                 tempNode = tempEdge.dst;
                 if(edgePath.contains(tempEdge)){
                     System.out.println("因重复路径"+tempEdge.src+"————>"+tempEdge.dst+" 结束遍历");
@@ -306,18 +341,30 @@ public class GraphOperations {
                 nodePath.add(tempNode);
                 bw.write(tempNode+"  ");
                 edgePath.add(tempEdge);
+                //监听用户是否结束函数
+                if(!t.isAlive()){
+                    System.out.println("用户手动结束函数！！");
+                    break;
+                }
+
             }
             bw.close();
             write.close();
+
+            System.out.println("函数执行完毕，请输入‘exit’退出........");
+
             return nodePath.toString();
+
         }catch(IOException e){
             e.printStackTrace();
             return nodePath.toString();
         }
 
 
+
     }
 
 
 }
+
 
