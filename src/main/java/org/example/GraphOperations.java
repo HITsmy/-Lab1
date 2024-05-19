@@ -155,7 +155,7 @@ public class GraphOperations {
     public static void calcShortestPath(String word1, String word2){
 
         if(!Util.nodes.contains(word1)||!Util.nodes.contains(word2)){
-            System.out.println(word1+"   "+word2+":不可达！！！！");
+            System.out.println(word1+ "与" +word2+"  不可达！");
             return ;
         }
         //初始化S,U,R
@@ -174,7 +174,7 @@ public class GraphOperations {
         for(edge i : Util.links.get(word1)){
            U.put(i.dst, Util.weights.get(i));
         }
-        System.out.println("初始化： "+U);
+//        System.out.println("初始化： "+U);
 
         //计算距离
         while(true){
@@ -196,9 +196,9 @@ public class GraphOperations {
             S.put(chosenNode,U.get(chosenNode));
             R.get(chosenNode).add(chosenNode);
             U.remove(chosenNode);
-            System.out.println(chosenNode+"-----------------------------------------------------------");
+//            System.out.println(chosenNode+"-----------------------------------------------------------");
             //System.out.println(R.get(chosenNode));
-            System.out.println(R.get(chosenNode));
+//            System.out.println(R.get(chosenNode));
             //重新计算期望距离
             if(Util.links.get(chosenNode)!=null){
 
@@ -206,6 +206,7 @@ public class GraphOperations {
                     if(U.get(i.dst)!=null && U.get(i.dst)>Util.weights.get(i)+S.get(chosenNode)){
 
                         U.put(i.dst,Util.weights.get(i)+S.get(chosenNode));
+                        R.remove(i.dst);
                         R.remove(i.dst);
 
                         R.put(i.dst,new ArrayList<>(R.get(chosenNode)));
@@ -215,24 +216,25 @@ public class GraphOperations {
 
             }
             if(U.size()==1){
-                System.out.println(S +"   "+ U);
+//                System.out.println(S +"   "+ U);
 
                 chosenNode = U.keySet().toArray()[0].toString();
                 S.put(chosenNode,U.get(chosenNode));
                 R.get(chosenNode).add(chosenNode);
                 U.remove(chosenNode);
-                System.out.println(chosenNode+"-----------------------------------------------------------");
+//                System.out.println(chosenNode+"-----------------------------------------------------------");
                 //System.out.println(R.get(chosenNode));
-                System.out.println(R.get(chosenNode));
+//                System.out.println(R.get(chosenNode));
                 break;
             }
-            System.out.println(S +"   "+ U);
+//            System.out.println(S +"   "+ U);
 
         }
 
         /**
          *  选做，将word1到所有节点的路径都打印出来
          */
+        System.out.println("The shortest paths from" + word1 + "to all nodes are:");
         for (String key : R.keySet()) {
             List<String> path = R.get(key);
             StringBuilder pathStr = new StringBuilder("");
@@ -243,7 +245,7 @@ public class GraphOperations {
                 pathStr.delete(pathStr.length() - 4, pathStr.length());
             }
             String pathStr_ = pathStr.toString();
-            System.out.println(key+":  "+pathStr_);
+            System.out.println(word1 + " -> " +  key + ":  " +pathStr_);
         }
 
 
@@ -256,7 +258,7 @@ public class GraphOperations {
         List<String> path = R.get(word2);
         Integer weight = S.get(word2);
         if(weight>=100000){
-            System.out.println(word1+"   "+word2+":不可达！！！！");
+            System.out.println(word1+"与"+word2+" 不可达！");
             return ;
         }
         int front = -1, rear = 0;
@@ -265,9 +267,6 @@ public class GraphOperations {
             node.setAttribute("ui.style", "size: 30px; text-size: 30px; fill-color: pink;");
             if (front >= 0) {
                 String edgeString = path.get(front) + "->" +path.get(rear);
-                System.out.println(front);
-                System.out.println(rear);
-                System.out.println(edgeString);
                 Edge edge = edgeHashMap.get(edgeString);
                 edge.setAttribute("ui.style", "size: 3px; text-size: 30px; fill-color: pink;");
             }

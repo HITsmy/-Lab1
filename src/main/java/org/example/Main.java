@@ -1,4 +1,4 @@
-package org.example.Tool;
+package org.example;
 import org.example.Util;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.MultiGraph;
@@ -18,33 +18,38 @@ public class Main {
 
         // 读取文件并切分字符串得到单词数组
         StringBuilder textContent = Util.read("src/main/java/org/example/text/text.txt");
-        System.out.println(textContent);
         String[] words = textContent.toString().split( "\\s+");
-        for (String word : words) {
-           // System.out.println(word);
+        System.out.println("---- The words are: ----");
+        for (int i=0; i<words.length; i++) {
+            System.out.print(words[i]);
+            if (i < words.length - 1)
+                System.out.print(", ");
         }
+        System.out.println("\n\n");
 
         // 根据单词数组生成有向图
         graph = GraphOperations.generateGraph(words);
-        System.out.println();
-        Util util = new Util();
+
+
         // 初始化工具
-        util.InitTools(GraphOperations.nodeHashMap.keySet(), GraphOperations.edgeHashMap.keySet(), graph);
+        Util.InitTools(GraphOperations.nodeHashMap.keySet(), GraphOperations.edgeHashMap.keySet(), graph);
 
-        //GraphOperations.searchWord(util, "strange");
-        //GraphOperations.queryBridgeWords(util, "to","strange");
-        //System.out.println(GraphOperations.generateNewText("TTo strange worlds to seek out life new",util));
-        //System.out.println(GraphOperations.randomWalk(util,"test1.txt"));
-        GraphOperations.calcShortestPath("explore","new");
-
-        // 展示有向图
+        // 计算最短路径
+        System.out.println("---- Shortest Path: ----");
+        GraphOperations.calcShortestPath("new", "explore");
         Viewer viewer = graph.display();
+        Util.draw(viewer, "src/main/java/org/example/png/shortest_distance.png");
+        System.out.println("\n\n");
 
+        // 生成文本
+        System.out.println("---- Generate Text: ----");
+        GraphOperations.generateNewText("seek to explore new and exciting synergies");
+        System.out.println("\n\n");
 
-
-        // 使用图布局算法
-        viewer.enableAutoLayout(Layouts.newLayoutAlgorithm());
-        Util.draw(viewer,"src/main/java/org/example/png/graph.png");
+        // 随机游走
+        System.out.println("---- Random Walk: ----");
+        GraphOperations.randomWalk("randomWalk");
+        System.out.println("\n\n");
 
     }
 }

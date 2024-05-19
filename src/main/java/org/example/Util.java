@@ -74,7 +74,7 @@ public class Util {
         // 保存图像到文件
         ImageIO.write(image, "png", new File(filename));
 
-        System.out.println("Graph saved as image.");
+        System.out.println("The graph has been saved as an image.");
     }
 
 
@@ -109,8 +109,6 @@ public class Util {
             }
 
         }
-
-        System.out.println("初始化完成");
     }
 
 }

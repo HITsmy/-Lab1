@@ -22,9 +22,13 @@ public class test {
         // 读取文件并切分字符串得到单词数组
         StringBuilder textContent = Util.read("src/main/java/org/example/text/text.txt");
         String[] words = textContent.toString().split( "\\s+");
-        for (String word : words) {
-            System.out.println(word);
+        System.out.println("The words are:");
+        for (int i=0; i<words.length; i++) {
+            System.out.print(words[i]);
+            if (i < words.length - 1)
+                System.out.print(", ");
         }
+        System.out.println("\n\n");
 
         // 根据单词数组生成有向图
         graph = GraphOperations.generateGraph(words);
@@ -34,18 +38,21 @@ public class test {
         Util.InitTools(GraphOperations.nodeHashMap.keySet(), GraphOperations.edgeHashMap.keySet(), graph);
 
         // 计算最短路径
-        System.out.println("Shortest Path");
-        GraphOperations.calcShortestPath("strange", "new");
+        System.out.println("---- Shortest Path: ----");
+        GraphOperations.calcShortestPath("new", "explore");
         Viewer viewer = graph.display();
         Util.draw(viewer, "src/main/java/org/example/png/shortest_distance.png");
+        System.out.println("\n\n");
 
         // 生成文本
-        System.out.println("Generate Text:");
+        System.out.println("---- Generate Text: ----");
         GraphOperations.generateNewText("seek to explore new and exciting synergies");
+        System.out.println("\n\n");
 
         // 随机游走
-        System.out.println("Random Walk:");
+        System.out.println("---- Random Walk: ----");
         GraphOperations.randomWalk("randomWalk");
+        System.out.println("\n\n");
 
 
     }
