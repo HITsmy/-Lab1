@@ -1,6 +1,6 @@
 package org.example;
+
 import org.example.Tool.edge;
-import org.example.Util;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -15,10 +15,6 @@ import java.util.*;
 /**
  *  对图进行操作的类
  */
-
-
-
-
 
 public class GraphOperations {
     // 两个哈希表，对在建图时需要
@@ -140,7 +136,12 @@ public class GraphOperations {
 
 
         }
-        return backet.toString();
+        StringBuilder str = new StringBuilder("");
+        for (String word : backet) {
+            str.append(word);
+            str.append(" ");
+        }
+        return str.toString();
     }
 
 
@@ -149,14 +150,15 @@ public class GraphOperations {
 
     /**
      * 最短路径（基于迪杰斯特拉算法）
+     *
      * @param word1, word2
      * @return String
      */
-    public static void calcShortestPath(String word1, String word2){
+    public static boolean calcShortestPath(String word1, String word2){
 
         if(!Util.nodes.contains(word1)||!Util.nodes.contains(word2)){
             System.out.println(word1+ "与" +word2+"  不可达！");
-            return ;
+            return false;
         }
         //初始化S,U,R
         HashMap<String, Integer> S = new HashMap();
@@ -259,7 +261,7 @@ public class GraphOperations {
         Integer weight = S.get(word2);
         if(weight>=100000){
             System.out.println(word1+"与"+word2+" 不可达！");
-            return ;
+            return false;
         }
         int front = -1, rear = 0;
         while (rear < path.size()) {
@@ -272,6 +274,7 @@ public class GraphOperations {
             }
             rear ++; front ++;
         }
+        return false;
     }
     /**
      * 随机漫步

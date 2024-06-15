@@ -37,16 +37,22 @@ public class test {
         // 初始化工具
         Util.InitTools(GraphOperations.nodeHashMap.keySet(), GraphOperations.edgeHashMap.keySet(), graph);
 
+        // 查询桥接词
+        System.out.println("---- Bridge word: ----");
+        System.out.println(GraphOperations.queryBridgeWords("explore", "new"));
+        System.out.println("\n\n");
+
+
         // 计算最短路径
         System.out.println("---- Shortest Path: ----");
-        GraphOperations.calcShortestPath("new", "explore");
+        GraphOperations.calcShortestPath("to", "strange");
         Viewer viewer = graph.display();
         Util.draw(viewer, "src/main/java/org/example/png/shortest_distance.png");
         System.out.println("\n\n");
 
         // 生成文本
         System.out.println("---- Generate Text: ----");
-        GraphOperations.generateNewText("seek to explore new and exciting synergies");
+        System.out.println(GraphOperations.generateNewText("seek to explore and exciting synergies"));
         System.out.println("\n\n");
 
         // 随机游走
